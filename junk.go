@@ -7,8 +7,8 @@ import (
 )
 
 type Message struct {
-	Name string
-	Data interface{}
+	Name string	`json:"name"`
+	Data interface{}	`json:"data"`
 }
 
 type Speaker interface {
@@ -16,8 +16,8 @@ type Speaker interface {
 }
 
 type Channel struct {
-	Id string
-	Name string
+	Id string	`json:"id"`
+	Name string	`json:"name"`
 }
 
 func main(){
