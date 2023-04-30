@@ -44,26 +44,51 @@ func handler(w http.ResponseWriter, r *http.Request){
 
 	for {
 		var inMessage Message
+		var outMessage Message
 		err := socket.ReadJSON(&inMessage)
 		if err != nil{
 			fmt.Println(err)
 			break
 		}
 		fmt.Printf("%#v\n", inMessage)
+
+		switch inMessage.Name {
+		case "channel add":
+			err := addChannel(inMessage.Data)
+			if err != nil{
+				outMessage = Message{"error", err}	//????
+				err := socket.WriteJSON(outMessage)
+				if err != nil{
+					fmt.Println(err)
+					break
+				}
+			}
+			//TODO call database function
+
+			// if you want to format the output, you can use the keyword 'fallthrough' (uncomment the line below)
+			// fallthrough
+		case "channel subscribe":
+			subscribeChannel()
+			//TODO call database function
+		}
 	}
 }
 
-func addChannel(data interface{}) (Channel, error) {
+func addChannel(data interface{}) (error) {
 	fmt.Println("Add Channel Function")
 	fmt.Println(data)
 
 	var channel Channel
 	err := mapstructure.Decode(data, &channel)
 	if err != nil{
-		return channel, err
+		return err
 	}
 
 	channel.Id = "1"
 	fmt.Printf("%#v\n", channel)
-	return channel, nil
+	return nil
+}
+
+func subscribeChannel(){
+	//TODO call database function (changefeed)
 }
