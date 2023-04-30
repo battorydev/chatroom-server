@@ -43,19 +43,13 @@ func handler(w http.ResponseWriter, r *http.Request){
 	}
 
 	for {
-		msgType, msg, err := socket.ReadMessage()
+		var inMessage Message
+		err := socket.ReadJSON(&inMessage)
 		if err != nil{
 			fmt.Println(err)
-			return
+			break
 		}
-
-		fmt.Println(string(msg))
-		err = socket.WriteMessage(msgType, msg)
-		if err != nil{
-			fmt.Println(err)
-			return
-		}
-
+		fmt.Printf("%#v\n", inMessage)
 	}
 }
 
