@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/websocket"
 	"net/http"
 	"github.com/mitchellh/mapstructure"
+	"time"
 )
 
 type Message struct {
@@ -68,7 +69,7 @@ func handler(w http.ResponseWriter, r *http.Request){
 			// if you want to format the output, you can use the keyword 'fallthrough' (uncomment the line below)
 			// fallthrough
 		case "channel subscribe":
-			subscribeChannel()
+			subscribeChannel(socket)
 			//TODO call database function
 		}
 	}
@@ -86,9 +87,17 @@ func addChannel(data interface{}) (error) {
 
 	channel.Id = "1"
 	fmt.Printf("%#v\n", channel)
+	fmt.Println("Added Channel.")
 	return nil
 }
 
-func subscribeChannel(){
+func subscribeChannel(socket *websocket.Conn){
+
 	//TODO call database function (changefeed)
+	for {
+		time.Sleep(time.Second * 1)
+		message := Message{"channel add", Channel{"1", "Software Support"}}
+		socket.WriteJSON(message)
+		fmt.Println("sent new channel")
+	}
 }
