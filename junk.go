@@ -3,24 +3,13 @@ package main
 import (
 	"fmt"
 	"encoding/json"
-	"github.com/mitchellh/mapstructure"
 )
 
-type Message struct {
-	Name string	`json:"name"`
-	Data interface{}	`json:"data"`
-}
 
-type Speaker interface {
-	Speak()
-}
 
-type Channel struct {
-	Id string	`json:"id"`
-	Name string	`json:"name"`
-}
 
-func main(){
+
+func main1(){
 	recRawMsg := []byte (`{"name":"channel add", "data":{"name":"Hardware Support"}}`)
 
 	var recMessage Message
@@ -49,17 +38,3 @@ func main(){
 
 }
 
-func addChannel(data interface{}) (Channel, error) {
-	fmt.Println("Add Channel Function")
-	fmt.Println(data)
-
-	var channel Channel
-	err := mapstructure.Decode(data, &channel)
-	if err != nil{
-		return channel, err
-	}
-
-	channel.Id = "1"
-	fmt.Printf("%#v\n", channel)
-	return channel, nil
-}
